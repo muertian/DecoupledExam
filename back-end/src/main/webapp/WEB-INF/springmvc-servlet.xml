@@ -17,4 +17,8 @@
 
     <!-- 启用Spring MVC的注解支持，使@Controller和@RequestMapping等注解生效 -->
     <mvc:annotation-driven/>
+
+    <!-- 配置 Spring 自动扫描指定包及其子包中的所有 Bean -->
+    <context:component-scan base-package="cn.edu.zjut.backend.controller" />
+    <context:component-scan base-package="cn.edu.zjut.backend.service" />
 </beans>

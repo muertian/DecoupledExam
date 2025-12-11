@@ -16,7 +16,24 @@ DROP TABLE IF EXISTS `exam_wrong_book`;
 DROP TABLE IF EXISTS `system_operation_log`;
 DROP TABLE IF EXISTS `user_login_log`;
 DROP TABLE IF EXISTS `security_event_log`;
+DROP TABLE IF EXISTS `subject`;
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- 学科表
+CREATE TABLE `subject` (
+  `subject_id`   INT(11)      NOT NULL AUTO_INCREMENT COMMENT '学科ID',
+  `subject_name` VARCHAR(50)  NOT NULL COMMENT '学科名称（如：语文、数学、英语、物理）',
+  `subject_code` VARCHAR(20)  NOT NULL COMMENT '学科编码（如：CHINESE、MATH、ENGLISH、PHYSICS）',
+  `grade_level`  TINYINT(2)   NOT NULL COMMENT '适用年级段：1小学 2初中 3高中 9通用',
+  `sort_order`   INT(11)      NOT NULL DEFAULT 0 COMMENT '排序值，越小越靠前',
+  `status`       TINYINT(1)   NOT NULL DEFAULT 1 COMMENT '状态：1启用 0禁用',
+  `create_time`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`subject_id`),
+  UNIQUE KEY `uk_code` (`subject_code`),
+  UNIQUE KEY `uk_name_grade` (`subject_name`,`grade_level`),
+  KEY `idx_grade` (`grade_level`),
+  KEY `idx_status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='学科表';
 
 -- 1. 用户表
 CREATE TABLE `user` (
@@ -63,7 +80,8 @@ CREATE TABLE `questions` (
   KEY `idx_type` (`type`),
   KEY `idx_creator` (`creator_id`),
   KEY `idx_review` (`review_status`),
-  FOREIGN KEY (`creator_id`) REFERENCES `user`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+  FOREIGN KEY (`creator_id`) REFERENCES `user`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  FOREIGN KEY (`subject_id`) REFERENCES `subject`(`subject_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='题目主表';
 
 -- 4. 子题表
@@ -284,3 +302,9 @@ CREATE TABLE `security_event_log` (
   KEY `idx_risk_level` (`risk_level`),
   KEY `idx_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='安全事件日志表';
+
+ALTER TABLE `edu_course` 
+  ADD COLUMN `subject_id` INT(11) DEFAULT NULL COMMENT '学科ID' AFTER `course_name`,
+  ADD KEY `idx_subject` (`subject_id`),
+  ADD CONSTRAINT `fk_course_subject` 
+  FOREIGN KEY (`subject_id`) REFERENCES `subject`(`subject_id`) ON DELETE SET NULL;
