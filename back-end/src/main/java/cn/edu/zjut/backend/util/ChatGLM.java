@@ -27,9 +27,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class ChatGLM {
-    private static final String API_KEY = "d107c7793e8e4862bd348e57fccfc24e";
+    private static final String API_KEY = "dc2dac203e4847a38277beb1f2ce5936";
 
-    private static final String API_SECRET = "FYJxdZijLMgSwNno";
+    private static final String API_SECRET = "TUemDuFlJBO7fX2F";
 
     private static final ClientV4 client = new ClientV4.Builder(API_KEY,API_SECRET).build();
 

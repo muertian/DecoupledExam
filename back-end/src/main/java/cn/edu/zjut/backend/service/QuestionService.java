@@ -8,9 +8,9 @@ import cn.edu.zjut.backend.po.QuestionItems;
 import cn.edu.zjut.backend.po.Questions;
 import cn.edu.zjut.backend.po.Subject;
 import cn.edu.zjut.backend.util.ChatGLM;
-import cn.edu.zjut.backend.util.Deekseek;
 import cn.edu.zjut.backend.util.HibernateUtil;
 import com.google.gson.Gson;
+import lombok.Data;
 import org.apache.poi.xwpf.usermodel.*;
 import org.hibernate.*;
 import org.springframework.stereotype.Service;
@@ -653,7 +653,9 @@ public class QuestionService {
         Session session = getSession();
         QuestionDAO dao = new QuestionDAO();
         dao.setSession(session);
-        return dao.query(dto);
+        List<Questions> questions = dao.query(dto);
+        HibernateUtil.closeSession();
+        return questions;
     }
 
     // 删除题目，支持批量删除
@@ -893,11 +895,21 @@ public class QuestionService {
                     return true;
                 } else {
                     retryCount++;
+                    try {
+                        Thread.sleep(2000);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
                     System.out.println("题目验证失败，重试第 " + retryCount + " 次");
                 }
 
             } catch (Exception e) {
                 retryCount++;
+                try {
+                    Thread.sleep(2000);
+                }catch (InterruptedException ie){
+                    ie.printStackTrace();
+                }
                 System.out.println("JSON解析失败，重试第 " + retryCount + " 次：" + e.getMessage());
             }
         }
@@ -947,30 +959,17 @@ public class QuestionService {
         // 可以根据需要添加更多验证规则
         return true;
     }
-}
 
-class QuestionList{
-    private List<String> questions;
-    private List<List<String>> questionImages;
+    @Data
+    public static class QuestionList{
+        private List<String> questions;
+        private List<List<String>> questionImages;
 
-    public QuestionList(List<String> questions, List<List<String>> questionImages) {
-        this.questions = questions;
-        this.questionImages = questionImages;
-    }
+        public QuestionList() {}
 
-    public List<String> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(List<String> questions) {
-        this.questions = questions;
-    }
-
-    public List<List<String>> getQuestionImages() {
-        return questionImages;
-    }
-
-    public void setQuestionImages(List<List<String>> questionImages) {
-        this.questionImages = questionImages;
+        public QuestionList(List<String> questions, List<List<String>> questionImages) {
+            this.questions = questions;
+            this.questionImages = questionImages;
+        }
     }
 }

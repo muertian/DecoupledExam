@@ -20,5 +20,8 @@
         <mapping class="cn.edu.zjut.backend.po.Questions"/>
         <mapping class="cn.edu.zjut.backend.po.QuestionItems"/>
         <mapping class="cn.edu.zjut.backend.po.QuestionComponents"/>
+        <mapping class="cn.edu.zjut.backend.po.QuestionTags"/>
+        <mapping class="cn.edu.zjut.backend.po.ExamPaper"/>
+        <mapping class="cn.edu.zjut.backend.po.ExamPaperQuestion"/>
     </session-factory>
 </hibernate-configuration>

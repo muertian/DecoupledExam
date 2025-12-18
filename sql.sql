@@ -162,6 +162,7 @@ CREATE TABLE `exam_paper` (
   `is_sealed`    CHAR(1)      NOT NULL DEFAULT '0' COMMENT '是否封存(0否 1是)',
   `creator_id`   BIGINT(20)   NOT NULL COMMENT '创建人ID',
   `create_time`  DATETIME     DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at`   DATETIME     DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`paper_id`),
   KEY `idx_course` (`course_id`),
   KEY `idx_creator` (`creator_id`),
