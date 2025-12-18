@@ -51,6 +51,31 @@ CREATE TABLE `edu_course` (
   FOREIGN KEY (`teacher_id`) REFERENCES `user`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='课程表';
 
+-- 5. 教师职位表（独立表，仅 id、教师ID、职位）
+-- =============================================
+CREATE TABLE teacher_position (
+  id BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '职位记录ID',
+  teacher_id BIGINT(20) NOT NULL COMMENT '教师ID',
+  role TINYINT(1) NOT NULL DEFAULT 0 COMMENT '职位：0任课老师 1教务老师',
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_teacher (teacher_id),
+  KEY idx_role (role),
+  CONSTRAINT fk_tp_teacher FOREIGN KEY (teacher_id) REFERENCES user(user_id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='教师职位表';
+
+-- =============================================
+-- 6. 教师职能表（教师 学科 多对多）
+-- =============================================
+CREATE TABLE teacher_subject (
+  teacher_id BIGINT(20) NOT NULL COMMENT '教师ID',
+  subject_id INT(11) NOT NULL COMMENT '学科ID',
+  is_main TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否主讲学科：1是 0兼任',
+  PRIMARY KEY (teacher_id, subject_id),
+  KEY idx_subject (subject_id),
+  CONSTRAINT fk_ts_teacher FOREIGN KEY (teacher_id) REFERENCES user(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_ts_subject FOREIGN KEY (subject_id) REFERENCES subject(subject_id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='教师职能表';
+
 -- =============================================
 -- 题型表（最终精简版：仅 3 个字段）
 -- =============================================

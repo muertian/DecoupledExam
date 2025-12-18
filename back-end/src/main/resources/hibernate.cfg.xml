@@ -4,10 +4,10 @@
         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/DecoupledExam</property>
         <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password">123456</property>
+        <property name="hibernate.connection.password">Wxh050428$</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
 
         <!--打印 sql 语句-->
@@ -20,6 +20,7 @@
         <mapping class="cn.edu.zjut.backend.po.Questions"/>
         <mapping class="cn.edu.zjut.backend.po.QuestionItems"/>
         <mapping class="cn.edu.zjut.backend.po.QuestionComponents"/>
+        <mapping class="cn.edu.zjut.backend.po.User"/>
         <mapping class="cn.edu.zjut.backend.po.QuestionTags"/>
         <mapping class="cn.edu.zjut.backend.po.ExamPaper"/>
         <mapping class="cn.edu.zjut.backend.po.ExamPaperQuestion"/>
