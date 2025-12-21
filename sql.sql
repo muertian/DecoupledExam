@@ -1,6 +1,6 @@
 DROP DATABASE IF EXISTS `DecoupledExam`;
 CREATE DATABASE `DecoupledExam`;
-DEFAULT CHARACTER SET utf8mb4;
+SET NAMES utf8mb4;
 DEFAULT COLLATE utf8mb4_unicode_ci;
 
 USE `DecoupledExam`;
@@ -10,7 +10,7 @@ CREATE TABLE `subject` (
   `subject_id`   INT(11)      NOT NULL AUTO_INCREMENT COMMENT '学科ID',
   `subject_name` VARCHAR(50)  NOT NULL COMMENT '学科名称（如：语文、数学、英语、物理）',
   `subject_code` VARCHAR(20)  NOT NULL COMMENT '学科编码（如：CHINESE、MATH、ENGLISH、PHYSICS）',
-  `grade_level`  TINYINT(2)   NOT NULL COMMENT '适用年级段：1小学 2初中 3高中 9通用',
+  `grade_level`  TINYINT(2)   NOT NULL COMMENT '适用年级段：1小学 2初中 3高中 4大学 9通用',
   `sort_order`   INT(11)      NOT NULL DEFAULT 0 COMMENT '排序值，越小越靠前',
   `status`       TINYINT(1)   NOT NULL DEFAULT 1 COMMENT '状态：1启用 0禁用',
   `create_time`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -27,11 +27,11 @@ CREATE TABLE `user` (
   `username`    VARCHAR(50)  NOT NULL COMMENT '登录账号',
   `password`    VARCHAR(100) NOT NULL COMMENT '加密密码',
   `real_name`   VARCHAR(50)  DEFAULT NULL COMMENT '真实姓名',
-  `user_type`   VARCHAR(20)  NOT NULL COMMENT '用户类型(admin,teacher,student)',
+  `user_type`   INT(4)       NOT NULL DEFAULT 2 COMMENT '用户类型：0=管理员(admin), 1=教师(teacher), 2=学生(student)',
   `face_img`    VARCHAR(255) DEFAULT NULL COMMENT '人脸识别基准照片URL',
   `phone`       VARCHAR(20)  DEFAULT NULL COMMENT '手机号',
-  `status`      CHAR(1)      NOT NULL DEFAULT '0' COMMENT '状态(0正常 1停用)',
-  `create_time` DATETIME     DEFAULT NULL COMMENT '注册时间',
+  `status`      CHAR(1)      NOT NULL DEFAULT '0' COMMENT '状态：0正常 1停用',
+  `create_time` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `uk_username` (`username`),
   KEY `idx_phone` (`phone`),
@@ -50,6 +50,31 @@ CREATE TABLE `edu_course` (
   KEY `idx_teacher` (`teacher_id`),
   FOREIGN KEY (`teacher_id`) REFERENCES `user`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='课程表';
+
+-- 5. 教师职位表（独立表，仅 id、教师ID、职位）
+-- =============================================
+CREATE TABLE teacher_position (
+  id BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '职位记录ID',
+  teacher_id BIGINT(20) NOT NULL COMMENT '教师ID',
+  role TINYINT(1) NOT NULL DEFAULT 0 COMMENT '职位：0任课老师 1教务老师',
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_teacher (teacher_id),
+  KEY idx_role (role),
+  CONSTRAINT fk_tp_teacher FOREIGN KEY (teacher_id) REFERENCES user(user_id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='教师职位表';
+
+-- =============================================
+-- 6. 教师职能表（教师 学科 多对多）
+-- =============================================
+CREATE TABLE teacher_subject (
+  teacher_id BIGINT(20) NOT NULL COMMENT '教师ID',
+  subject_id INT(11) NOT NULL COMMENT '学科ID',
+  is_main TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否主讲学科：1是 0兼任',
+  PRIMARY KEY (teacher_id, subject_id),
+  KEY idx_subject (subject_id),
+  CONSTRAINT fk_ts_teacher FOREIGN KEY (teacher_id) REFERENCES user(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_ts_subject FOREIGN KEY (subject_id) REFERENCES subject(subject_id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='教师职能表';
 
 -- =============================================
 -- 题型表（最终精简版：仅 3 个字段）
@@ -146,7 +171,7 @@ CREATE TABLE `question_components` (
 CREATE TABLE `question_tags` (
   `id`          BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '主键',
   `question_id` BIGINT(20)  NOT NULL COMMENT '题目ID',
-  `tag_name`    VARCHAR(50) NOT NULL COMMENT '标签名称',
+  `tag_name`    VARCHAR(30) NOT NULL COMMENT '标签名称',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_question_tag` (`question_id`,`tag_name`),
   FOREIGN KEY (`question_id`) REFERENCES `questions`(`id`) ON DELETE CASCADE
@@ -162,6 +187,7 @@ CREATE TABLE `exam_paper` (
   `is_sealed`    CHAR(1)      NOT NULL DEFAULT '0' COMMENT '是否封存(0否 1是)',
   `creator_id`   BIGINT(20)   NOT NULL COMMENT '创建人ID',
   `create_time`  DATETIME     DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at`   DATETIME     DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`paper_id`),
   KEY `idx_course` (`course_id`),
   KEY `idx_creator` (`creator_id`),
