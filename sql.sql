@@ -171,7 +171,7 @@ CREATE TABLE `question_components` (
 CREATE TABLE `question_tags` (
   `id`          BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '主键',
   `question_id` BIGINT(20)  NOT NULL COMMENT '题目ID',
-  `tag_name`    VARCHAR(50) NOT NULL COMMENT '标签名称',
+  `tag_name`    VARCHAR(30) NOT NULL COMMENT '标签名称',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_question_tag` (`question_id`,`tag_name`),
   FOREIGN KEY (`question_id`) REFERENCES `questions`(`id`) ON DELETE CASCADE
