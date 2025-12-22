@@ -43,16 +43,14 @@ public class LoginLogger {
     /**
      * 记录用户登录成功日志
      */
-    public void logLoginSuccess(Long userId, String username, String ipAddress, 
-                              String userAgent, String sessionId) {
-        logUserLogin(userId, username, ipAddress, userAgent, 1, null, sessionId);
+    public void logLoginSuccess(Long userId, String username) {
+//        logUserLogin(userId, username, 1, null);
     }
     
     /**
      * 记录用户登录失败日志
      */
-    public void logLoginFailure(String username, String ipAddress, 
-                              String userAgent, String failureReason) {
-        logUserLogin(null, username, ipAddress, userAgent, 0, failureReason, null);
+    public void logLoginFailure(String failureReason) {
+//        logUserLogin(null, username, ipAddress, userAgent, 0, failureReason, null);
     }
 }

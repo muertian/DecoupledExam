@@ -86,6 +86,7 @@ public class UserController {
                     user.setUserId(userId);
                     user.setUsername(username);
                     user.setUserType(userType);
+
 //                    session.setAttribute("currentUser", user);
                     
                     // 记录登录成功日志
@@ -99,6 +100,12 @@ public class UserController {
 //                        request.getHeader("User-Agent"),
 //                        session.getId()
 //                    );
+                    
+                    // 记录登录成功日志
+//                    loginLogger.logLoginSuccess(
+//                        userId,
+//                        username
+//                    );
                 }
             }
             return Response.success(token);
@@ -110,6 +117,7 @@ public class UserController {
 //                request.getHeader("User-Agent"),
 //                "用户名或密码错误，或账户已被禁用"
 //            );
+            loginLogger.logLoginFailure("用户名或密码错误，或账户已被禁用");
             return Response.error("用户名或密码错误，或账户已被禁用");
         }
     }
