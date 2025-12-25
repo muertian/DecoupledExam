@@ -21,7 +21,10 @@ public class QuestionQueryDTO {
     // 最大难度（≤）
     private Integer maxDifficulty;
     // 选择的审核状态数组（0: 待审核, 1: 已通过, 2: 已拒绝）
-    private List<String> selectedStatuses;
+    private List<Byte> selectedStatuses;
     // 出题人查询（ID 或姓名）
     private Long authorQuery;
+
+    private Integer pageNum;
+    private Integer pageSize;
 }

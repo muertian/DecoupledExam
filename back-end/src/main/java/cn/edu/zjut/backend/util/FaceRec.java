@@ -44,7 +44,7 @@ public class FaceRec {
         FaceDetConfig faceDetConfig = new FaceDetConfig();
         faceDetConfig.setModelEnum(FaceDetModelEnum.MTCNN); //人脸检测模型
         // 离线模型存储路径
-        String resourcePath = "C:\\Users\\31986\\Desktop\\DecoupledExam\\resources";    // 依据情况自己改
+        String resourcePath = "C:\\Users\\31986\\Desktop\\resources";    // 依据情况自己改
         faceDetConfig.setModelPath(resourcePath + "\\FaceModel\\mtcnn");
         FaceDetModel faceDetModel = FaceDetModelFactory.getInstance().getModel(faceDetConfig);
 
@@ -78,11 +78,13 @@ public class FaceRec {
     public boolean faceRecognition(String file){
         InputStream inputStream = Base64Util.base64ToInputStream(file);
         R<LivenessResult> status = livenessDetModel.detectVideo(inputStream);
+        System.out.println(status.getData().toString());
         if(status.getData().getStatus().toString().equals("LIVE")){ // 确定是活体
             try {
                 BufferedImage bufferedImage = extractRandomFrame(file);
                 Image image = SmartImageFactory.getInstance().fromBufferedImage(bufferedImage);
                 R<DetectionResponse> res = faceQuery(image);
+                System.out.println(res.toString());
                 if(res.getCode().intValue() == 0 && res.getMessage().toString().equals("成功") && res.getData()!=null){
                     return true;
                 }else{
@@ -100,7 +102,8 @@ public class FaceRec {
     // 人脸注册
     public boolean faceRegister(String file){
         try {
-            Image faceImg = SmartImageFactory.getInstance().fromBase64(file);
+            InputStream inputStream = Base64Util.base64ToInputStream(file);
+            Image faceImg = SmartImageFactory.getInstance().fromInputStream(inputStream);
             String uuid = UUID.randomUUID().toString().replace("-", "");;
 
             faceRecModel.loadFaceFeatures();
@@ -115,7 +118,7 @@ public class FaceRec {
             }
             return true;
         }catch (Exception e){
-            System.err.println(e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }

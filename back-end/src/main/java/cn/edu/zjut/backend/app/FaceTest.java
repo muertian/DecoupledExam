@@ -40,14 +40,16 @@ public class FaceTest {
 
         FaceRec faceRec = new FaceRec();
 
-        Image image = SmartImageFactory.getInstance().fromFile(Paths.get("C:\\Users\\31986\\Desktop\\1.jpg"));
-
+//        Image image = SmartImageFactory.getInstance().fromFile(Paths.get("C:\\Users\\31986\\Desktop\\证件\\5032083c6c526f82552cab483fc7a25.jpg"));
         String file = Files.readString(Paths.get("C:\\Users\\31986\\Desktop\\output_base64.txt"));
-        if(faceRec.faceRecognition(file)){
-            System.out.println("识别成功");
-        }else {
-            System.out.println("识别失败");
-        }
+
+        faceRec.faceRegister(file);
+
+//        if(faceRec.faceRecognition(file)){
+//            System.out.println("识别成功");
+//        }else {
+//            System.out.println("识别失败");
+//        }
 //        faceRec.faceRegister("1", "{测试一下}", image);
     }
 }

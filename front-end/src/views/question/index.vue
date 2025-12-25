@@ -13,10 +13,10 @@
       </aside>
 
       <!-- 主内容区（表格 + 批量操作） -->
-      <main class="flex-1">
+      <main class="flex-1 flex flex-col items-center">
         <!-- 操作栏、表格等保持不变 -->
         <!-- ...（此处省略，与之前一致，但注意 filteredQuestions 使用 filters） -->
-        <div class="p-6 space-y-6 text-base">
+        <div class="p-6 space-y-6 text-base w-3/4">
           <!-- 操作区域 -->
           <div class="flex flex-wrap gap-3 items-center">
             <button class="btn btn-primary" @click="handleCreate">
@@ -48,8 +48,8 @@
           </div>
 
           <!-- 题目表格 -->
-          <div class="overflow-x-auto rounded-box border">
-            <table class="table table-zebra w-full">
+          <div v-show="!isLoading" class="overflow-x-auto rounded-box border">
+            <table class="table w-full">
               <thead>
               <tr>
                 <!-- 多选框列（仅在批量模式下显示） -->
@@ -58,7 +58,6 @@
                       type="checkbox"
                       class="checkbox checkbox-sm"
                       :checked="isAllSelected"
-                      :indeterminate="isIndeterminate"
                       @change="toggleSelectAll"
                   />
                 </th>
@@ -73,7 +72,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="(question, index) in questions" :key="question.id">
+              <tr v-for="(question, index) in questions" :key="question.id" class="hover">
                 <!-- 多选框单元格 -->
                 <td v-if="showCheckboxes" class="text-center">
                   <input
@@ -84,12 +83,12 @@
                   />
                 </td>
                 <td>{{ index + 1 }}</td>
-                <td>{{ questionTypes.find(type => type.typeId === question.typeId)?.typeName }}</td>
+                <td class="whitespace-nowrap">{{ questionTypes.find(type => type.typeId === question.typeId)?.typeName }}</td>
                 <td class="max-w-xs truncate" :title="question.title">
                   {{ question.title }}
                 </td>
                 <td>{{ question.difficulty }}</td>
-                <td>{{ question.subjectId }}</td>
+                <td class="whitespace-nowrap max-w-32 truncate">{{ subjectsList.find(obj => obj.subjectId === question.subjectId)?.subjectName }}</td>
                 <td>
               <span
                   class="badge"
@@ -108,9 +107,36 @@
               </tbody>
             </table>
           </div>
+          <div v-show="isLoading" class="flex gap-3 justify-center">
+            <span class="loading loading-ring loading-xs"></span>
+            <span class="loading loading-ring loading-sm"></span>
+            <span class="loading loading-ring loading-md"></span>
+            <span class="loading loading-ring loading-lg"></span>
+          </div>
 
           <div v-if="questions==null || questions.length === 0" class="text-center py-8 text-gray-500">
             暂无题目，请点击“创建题目”添加。
+          </div>
+          <div v-else class="flex justify-center items-center gap-4">
+            <div class="join">
+              <button @click="handlePrevPage" class="join-item btn">«</button>
+              <button @dblclick="modifyPageNum" class="join-item btn">Page
+                <div v-if="!isModifyPageNum">{{pageInfo.pageNum}}
+                </div>
+                <div v-else>
+                  <input
+                      v-model="tempPageNum"
+                      @blur="overModifyPageNum"
+                      @keyup.enter="overModifyPageNum"
+                      id="pageNumInput"
+                      type="text"
+                      placeholder="Type here"
+                      class="input-xs max-w-10 min-w-4 text-base" />
+                </div>
+              </button>
+              <button @click="handleNextPage" class="join-item btn">»</button>
+            </div>
+            <span>共 {{totalPageNum}} 页</span>
           </div>
         </div>
       </main>
@@ -119,10 +145,10 @@
 </template>
 
 <script setup lang="ts">
-import {ref, computed, watch, onMounted } from 'vue'
+import {ref, computed, watch, onMounted, nextTick, onBeforeMount} from 'vue'
 import { QuestionFilters } from "../../components";
 import { useRequest } from "vue-hooks-plus";
-import { getQuestionsAPI, getQuestionTypeAPI } from '../../apis'
+import { getQuestionsAPI, getQuestionTypeAPI, getSubjectAPI } from '../../apis'
 
 // 审核状态映射（根据你的实际字段调整）
 const statusMap = {
@@ -148,6 +174,7 @@ const questions = ref<Question[]>([])
 const showSidebar = ref(window.innerWidth >= 1024)
 
 const questionTypes = ref()
+const subjectsList = ref()
 
 onMounted(()=>{
   useRequest(()=>getQuestionTypeAPI(), {
@@ -158,7 +185,15 @@ onMounted(()=>{
     }
   })
 
-  getQuestions()
+  useRequest(()=>getSubjectAPI(), {
+    onSuccess(res) {
+      if (res['code'] === 200) {
+        subjectsList.value = res['data']
+      }
+    }
+  })
+
+  getQuestions(false)
 })
 
 // ========== 筛选状态 ==========
@@ -169,16 +204,59 @@ const filters = ref({
   selectedSubjects: [] as string[],
   maxDifficulty: 5,
   selectedStatuses: [] as ('0' | '1' | '2')[],
-  authorQuery: ''
+  authorQuery: '',
+})
+
+const pageInfo = ref({
+  pageNum: 1,        // 当前页码
+  pageSize: 10       // 每页显示条数
 })
 
 // 过滤逻辑
 watch(()=>filters, (newVal) => {
-  console.log("abcd")
-  getQuestions()
-},{deep:true})
+  pageInfo.value.pageNum = 1
+  getQuestions(true)
+}, { deep: true })
 
-const getQuestions = async () => {
+const isLoading = ref<boolean>(false);
+
+const isModifyPageNum = ref(false);
+const tempPageNum = ref<number>()
+
+const modifyPageNum = () => {        // 双击事件
+  tempPageNum.value = pageInfo.value.pageNum
+  isModifyPageNum.value = true;
+  nextTick(()=>{    // 等待页面渲染完（等输入框渲染）
+    let pageNumInput = document.getElementById('pageNumInput') as HTMLInputElement;
+    pageNumInput.focus();    // 自动将光标选中输入框的内容尾部
+    pageNumInput.setSelectionRange(pageNumInput.value.length, pageNumInput.value.length);
+  })
+}
+const overModifyPageNum = () => {
+  isModifyPageNum.value = false;
+  if(tempPageNum.value>=1 && tempPageNum.value<=totalPageNum.value){
+    pageInfo.value.pageNum = tempPageNum.value
+    getQuestions(false)
+  }
+}
+
+const totalPageNum = ref<number>()
+
+const handlePrevPage = () => {
+  if(pageInfo.value.pageNum > 1){
+    pageInfo.value.pageNum--
+    getQuestions(false)
+  }
+}
+
+const handleNextPage = () => {
+  if(pageInfo.value.pageNum < totalPageNum.value){
+    pageInfo.value.pageNum++
+    getQuestions(false)
+  }
+}
+
+const getQuestions = async (isDebounce:boolean) => {
 
   // 映射一下（ID之类的）
   const filterParam = ref({
@@ -188,13 +266,19 @@ const getQuestions = async () => {
     selectedSubjects: [] as string[],
     maxDifficulty: 5,
     selectedStatuses: [] as ('0' | '1' | '2')[],
-    authorQuery: ''
+    authorQuery: '',
+
+    pageNum: 1,        // 当前页码
+    pageSize: 10       // 每页显示条数
   })
 
   filterParam.value.mineOnly = filters.value.mineOnly
   filterParam.value.stemKeyword = filters.value.stemKeyword
   filterParam.value.maxDifficulty = filters.value.maxDifficulty
   filterParam.value.authorQuery = filters.value.authorQuery
+
+  filterParam.value.pageNum = pageInfo.value.pageNum
+  filterParam.value.pageSize = pageInfo.value.pageSize
 
   for(let i = 0; i < filters.value.selectedTypes.length; i++){
     filterParam.value.selectedTypes[i] = filters.value.selectedTypes[i]['typeId']
@@ -208,19 +292,51 @@ const getQuestions = async () => {
     filterParam.value.selectedStatuses[i] = filters.value.selectedStatuses[i]['value']
   }
 
-  useRequest(()=>getQuestionsAPI(filterParam.value),{
-    onSuccess(res){
-      if(res['code'] === 200){
-        console.log(res)
-        questions.value = res['data']
-      }
-    }
-  })
+  if(isDebounce){
+    run(filterParam.value)
+  }else{
+    runWithoutDebounce(filterParam.value)
+  }
 }
+
+// 获取题目（防抖）
+const { data, run } = useRequest((filterParam)=>getQuestionsAPI(<any>filterParam),{
+  onBefore(){
+    isLoading.value = true;
+  },
+  onSuccess(res){
+    if(res['code'] === 200){
+      questions.value = res['data']['questions']
+      totalPageNum.value = res['data']['total']
+    }
+  },
+  onFinally(){
+    isLoading.value = false
+  },
+  debounceWait: 500,
+  manual: true
+})
+
+// 获取题目（不防抖）
+const { run: runWithoutDebounce } = useRequest((filterParam)=>getQuestionsAPI(<any>filterParam),{
+  onBefore(){
+    isLoading.value = true;
+  },
+  onSuccess(res){
+    if(res['code'] === 200){
+      questions.value = res['data']['questions']
+      totalPageNum.value = res['data']['total']
+    }
+  },
+  onFinally(){
+    isLoading.value = false
+  },
+  manual: true
+})
+
 
 // 重置方法
 const resetFilters = () => {
-  console.log("reset")
   filters.value = {
     mineOnly: false,
     stemKeyword: '',
@@ -228,7 +344,12 @@ const resetFilters = () => {
     selectedSubjects: [] as string[],
     maxDifficulty: 5,
     selectedStatuses: [] as ('0' | '1' | '2')[],
-    authorQuery: ''
+    authorQuery: '',
+  }
+
+  pageInfo.value = {
+    pageNum: 1,
+    pageSize: 10
   }
 }
 

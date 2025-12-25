@@ -9,7 +9,7 @@
       <li><a>试卷管理</a></li>
     </ul>
   </div>
-  <div class="dropdown dropdown-end">
+  <div v-if="userType" class="dropdown dropdown-end">
     <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
       <div class="w-10 rounded-full">
         <img
@@ -27,7 +27,7 @@
         </a>
       </li>
       <li><a>Settings</a></li>
-      <li><a>Logout</a></li>
+      <li><a @click="logout">Logout</a></li>
     </ul>
   </div>
 </div>
@@ -35,9 +35,15 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { useMainStore } from "../../stores";
+import router from "../../routers";
 
 const userType = ref<string>(localStorage.getItem("userType"))
-</script>
 
-<script setup lang="ts">
+const logout = () => {
+  localStorage.removeItem("token")
+  localStorage.removeItem("userType")
+  useMainStore().useLoginStore().setLogin(false)
+  router.push('/login').then(()=>{window.location.reload();})
+}
 </script>

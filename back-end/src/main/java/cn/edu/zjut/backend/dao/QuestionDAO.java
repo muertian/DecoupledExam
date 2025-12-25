@@ -84,6 +84,7 @@ public class QuestionDAO {
             }
 
             hql.append(conditions);
+            System.out.println(hql.toString());
 
             // 创建查询
             Query<Questions> query = session.createQuery(hql.toString(), Questions.class);
@@ -91,6 +92,7 @@ public class QuestionDAO {
             // 设置参数
             if (filterDTO.isMineOnly()) {
                 query.setParameter("creatorId", UserContext.getUserId()); // 需要获取当前用户ID
+                System.out.println(UserContext.getUserId());
             }
 
             if (filterDTO.getStemKeyword() != null && !filterDTO.getStemKeyword().isEmpty()) {

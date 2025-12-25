@@ -721,6 +721,7 @@ public class QuestionService {
         QuestionDAO dao = new QuestionDAO();
         dao.setSession(session);
         List<Questions> questions = dao.query(filterDTO);
+
         HibernateUtil.closeSession();
         return questions;
     }
