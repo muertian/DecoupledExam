@@ -62,17 +62,7 @@ public class HibernateUtil {
         System.out.println("获取Hibernate Session: " + session);
         return session;
     }
-    
-    // 获取当前线程绑定的Session，适用于事务上下文
-    public static Session getCurrentSession() throws HibernateException {
-        if (sessionFactory == null) {
-            rebuildSessionFactory();
-        }
-        Session session = sessionFactory.getCurrentSession();
-        System.out.println("获取当前线程绑定的Hibernate Session: " + session);
-        return session;
-    }
-    
+
     // 创建一个新的独立Session，用于在没有事务上下文的情况下执行操作
     public static Session getNewSession() throws HibernateException {
         if (sessionFactory == null) {
