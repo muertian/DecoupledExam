@@ -583,6 +583,75 @@ public class UserController {
     }
     
     /**
+     * 根据用户ID获取用户信息（仅管理员可访问其他用户信息）
+     */
+    @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Response<User> getUserById(@PathVariable("userId") Long userId, HttpServletRequest request) {
+        Claims claims = (Claims) request.getAttribute("claims");
+        if (claims == null) {
+            return Response.error("请先登录");
+        }
+        
+        Long currentUserId = ((Number) claims.get("id")).longValue();
+        Integer currentUserType = (Integer) claims.get("userType");
+        
+        // 普通用户只能查看自己的信息，管理员可以查看所有用户信息
+        if (!currentUserId.equals(userId) && currentUserType != 0) {
+            return Response.error("权限不足，只能查看自己的信息或管理员可查看所有用户信息");
+        }
+        
+        User user = userService.getUserById(userId);
+        if (user != null) {
+            // 清除密码信息再返回
+            user.setPassword(null);
+            return Response.success(user);
+        } else {
+            return Response.error("用户不存在");
+        }
+    }
+    
+    /**
+     * 获取当前用户头像
+     */
+    @RequestMapping(value = "/user/avatar", method = RequestMethod.GET)
+    @ResponseBody
+    public Response<String> getUserAvatar(HttpServletRequest request) {
+        Claims claims = (Claims) request.getAttribute("claims");
+        if (claims == null) {
+            return Response.error("请先登录");
+        }
+        
+        Long currentUserId = ((Number) claims.get("id")).longValue();
+        User user = userService.getUserById(currentUserId);
+        if (user != null) {
+            return Response.success(user.getAvatarUrl());
+        } else {
+            return Response.error("用户不存在");
+        }
+    }
+    
+    /**
+     * 获取当前用户人脸基准照片
+     */
+    @RequestMapping(value = "/user/face-image", method = RequestMethod.GET)
+    @ResponseBody
+    public Response<String> getUserFaceImage(HttpServletRequest request) {
+        Claims claims = (Claims) request.getAttribute("claims");
+        if (claims == null) {
+            return Response.error("请先登录");
+        }
+        
+        Long currentUserId = ((Number) claims.get("id")).longValue();
+        User user = userService.getUserById(currentUserId);
+        if (user != null) {
+            return Response.success(user.getFaceImg());
+        } else {
+            return Response.error("用户不存在");
+        }
+    }
+    
+    /**
      * 管理员模拟用户登录
      */
     @RequestMapping(value = "/user/simulate", method = RequestMethod.POST)

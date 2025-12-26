@@ -20,8 +20,10 @@
     <mvc:annotation-driven/>
 
     <aop:aspectj-autoproxy />
-    <!-- 静态资源配置，用于访问上传的人脸图片 -->
+    <!-- 静态资源配置，用于访问上传的人像图片 -->
 <mvc:resources mapping="/uploads/face_images/**" location="file:D:/JAVAfile/JavaEEprogram/DecoupledExam/uploads/face_images/" />
+    <!-- 静态资源配置，用于访问上传的头像图片 -->
+<mvc:resources mapping="/uploads/avatars/**" location="file:D:/JAVAfile/JavaEEprogram/DecoupledExam/uploads/avatars/" />
 
 
     <!-- 配置 Spring 自动扫描指定包及其子包中的所有 Bean -->

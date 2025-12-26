@@ -4,6 +4,36 @@ export default function userAPI() {
 }
 
 
+// 获取用户信息接口
+export const getUserInfoAPI = async (token: string) => {
+  return request("/api/user", {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+}
+
+// 根据用户ID获取用户信息接口
+export const getUserInfoByIdAPI = async (userId: number, token: string) => {
+  return request(`/api/user/${userId}`, {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+}
+
+// 获取头像接口
+export const getAvatarAPI = async (token: string) => {
+  return request("/api/user/avatar", {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+}
+
 // 更新用户信息接口
 interface UpdateUserInfoData {
   username?: string;

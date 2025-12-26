@@ -4,14 +4,19 @@ import { useMainStore } from "../stores";
 import { storeToRefs } from "pinia";
 
 
-import { 
-  Login, 
-  Register, 
+import {
+  Login,
+  Register,
   TeacherRegister,
-  ProfileManagement
+  ProfileManagement,
+  Question
 } from "../views";
 
 const routes: Array<RouteRecordRaw> = [
+  {
+    path : "/",
+    redirect : "/hello"        // 实际情况，不会有单纯的根路由，所以在访问网址时，就需要重定向。
+  },
   {
     path: "/",
     redirect: "/login"
@@ -25,6 +30,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/register",
     name: "register",
     component: Register,
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: ProfileManagement,
   },
   {
     path: "/admin/teacher/register",        
@@ -44,30 +54,15 @@ const routes: Array<RouteRecordRaw> = [
         path: "profile",
         name: "profileManagement",
         component: ProfileManagement,
-      }
-    ]
-  }
-
-];
-import { Login, Question } from "../views";
-
-const routes : Array<RouteRecordRaw> = [
-    {
-        path : "/",
-        redirect : "/hello"        // 实际情况，不会有单纯的根路由，所以在访问网址时，就需要重定向。
-    },
-    {
-        path : "/login",           // 路由的URL
-        name : "login",             // 路由的名字
-        component : Login,    // 路由对应的组件
-    },                           // 如果还有其他的路由，就继续添加
-    {
+      },
+      {
         path: "/teacher/question",
         name: "question",
         component : Question,
-    }
-
-]
+      }
+    ]
+  }
+];
 
 const router = createRouter({
   history: createWebHistory(),

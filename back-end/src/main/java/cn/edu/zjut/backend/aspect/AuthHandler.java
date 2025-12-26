@@ -70,6 +70,8 @@ public class AuthHandler {
             }
 
             UserContext.setClaims(claims);
+            // 同时将claims设置到request属性中，以供Controller使用
+            request.setAttribute("claims", claims);
 
             // ✅ 放行，执行 Controller
             return joinPoint.proceed();

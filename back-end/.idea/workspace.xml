@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="back-end:war" />
       <artifact name="back-end:war exploded" />
     </artifacts-to-build>
   </component>
@@ -11,9 +10,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4fbd584e-7bd6-478b-8e4e-ed914d672ffe" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/zjut/backend/aspect/AuthHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/zjut/backend/aspect/AuthHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/zjut/backend/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/zjut/backend/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/springmvc-servlet.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/springmvc-servlet.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/apis/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/apis/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/components/navbar/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/components/navbar/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/routers/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routers/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../front-end/src/views/admin/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/views/admin/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../uploads/avatars/avatar_1_1766557797337.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/views/admin/profile/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/views/profile/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/views/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/views/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,39 +67,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Base64Test.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ChatGLM.executor&quot;: &quot;Run&quot;,
-    &quot;Application.SM4test.executor&quot;: &quot;Run&quot;,
-    &quot;Application.TestMain (1).executor&quot;: &quot;Run&quot;,
-    &quot;Application.TestMain.executor&quot;: &quot;Run&quot;,
-    &quot;Application.testChatGLM.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Tomcat Server.Tomcat 11.0.3.executor&quot;: &quot;Run&quot;,
-    &quot;Tomcat 服务器.Tomcat 11.0.3.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;wxh&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/31986/Desktop/DecoupledExam/sql.sql&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;模块&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.32528734&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;Console&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
-    &quot;应用程序.SM4test.executor&quot;: &quot;Run&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Base64Test.executor": "Run",
+    "Application.ChatGLM.executor": "Run",
+    "Application.SM4test.executor": "Run",
+    "Application.TestMain (1).executor": "Run",
+    "Application.TestMain.executor": "Run",
+    "Application.testChatGLM.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Tomcat Server.Tomcat 11.0.3.executor": "Run",
+    "Tomcat 服务器.Tomcat 11.0.3.executor": "Run",
+    "Tomcat 服务器.Tomcat 11.0.4.executor": "Run",
+    "git-widget-placeholder": "wxh",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/31986/Desktop/DecoupledExam/sql.sql",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "模块",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.32528734",
+    "settings.editor.selected.configurable": "Console",
+    "vue.rearranger.settings.migration": "true",
+    "应用程序.SM4test.executor": "Run"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
-  <component name="RunManager" selected="Tomcat 服务器.Tomcat 11.0.3">
+}]]></component>
+  <component name="RunManager" selected="Tomcat 服务器.Tomcat 11.0.4">
     <configuration name="Base64Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="cn.edu.zjut.backend.app.Base64Test" />
       <module name="back-end" />
@@ -152,7 +160,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Tomcat 11.0.3" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 11.0.3" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
+    <configuration name="Tomcat 11.0.4" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 11.0.4" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
       <option name="UPDATING_POLICY" value="restart-server" />
       <deployment>
         <artifact name="back-end:war exploded">
@@ -241,7 +249,7 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Tomcat 服务器.Tomcat 11.0.3" />
+      <item itemvalue="Tomcat 服务器.Tomcat 11.0.4" />
       <item itemvalue="应用程序.Base64Test" />
       <item itemvalue="应用程序.ChatGLM" />
       <item itemvalue="应用程序.SM4test" />
