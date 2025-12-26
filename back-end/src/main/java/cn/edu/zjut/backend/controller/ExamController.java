@@ -1,5 +1,6 @@
 package cn.edu.zjut.backend.controller;
 
+import cn.edu.zjut.backend.annotation.LogRecord;
 import cn.edu.zjut.backend.po.Exam;
 import cn.edu.zjut.backend.po.ExamSetting;
 import cn.edu.zjut.backend.po.ExamRecord;
@@ -43,6 +44,7 @@ public class ExamController {
      * 发布考试（修复空值/格式/参数校验）
      */
     @PostMapping
+    @LogRecord(module = "考试管理", action = "发布考试", targetType = "考试", logType = LogRecord.LogType.OPERATION)
     public Response<Long> createExam(@RequestBody ExamCreateReq req) {
         try {
             // ========== 1. 前置参数校验（优先拦截错误） ==========
@@ -142,6 +144,7 @@ public class ExamController {
      * @return 考试列表
      */
     @GetMapping
+    @LogRecord(module = "考试管理", action = "查询考试列表", targetType = "考试", logType = LogRecord.LogType.OPERATION)
     public Response<List<Exam>> getExamList(
             @RequestParam(required = false) Byte status,
             @RequestParam(required = false) Long teacherId) {
@@ -160,6 +163,7 @@ public class ExamController {
      * @return 考试详情
      */
     @GetMapping("/{examId}")
+    @LogRecord(module = "考试管理", action = "获取考试详情", targetType = "考试", logType = LogRecord.LogType.OPERATION)
     public Response<Exam> getExamById(@PathVariable("examId") Long examId) {
         try {
             Exam exam = examService.getExamById(examId);
@@ -180,6 +184,7 @@ public class ExamController {
      * @return 考试记录
      */
     @GetMapping("/record/{recordId}")
+    @LogRecord(module = "考试管理", action = "获取考试记录", targetType = "考试记录", logType = LogRecord.LogType.OPERATION)
     public Response<ExamRecord> getExamRecordById(@PathVariable("recordId") Long recordId) {
         try {
             ExamRecord record = examService.getExamRecordById(recordId);
@@ -201,6 +206,7 @@ public class ExamController {
      * @return 是否更新成功
      */
     @PostMapping("/{examId}/update")
+    @LogRecord(module = "考试管理", action = "更新考试信息", targetType = "考试", logType = LogRecord.LogType.OPERATION)
     public Response<Boolean> updateExamWithPost(@PathVariable("examId") Long examId,
                                              @RequestBody ExamUpdateReq req) {
         try {
@@ -258,6 +264,7 @@ public class ExamController {
      * @return 是否删除成功
      */
     @PostMapping("/{examId}/delete")
+    @LogRecord(module = "考试管理", action = "删除考试", targetType = "考试", logType = LogRecord.LogType.OPERATION)
     public Response<Boolean> deleteExamWithPost(@PathVariable("examId") Long examId) {
         try {
             boolean success = examService.deleteExam(examId);
@@ -275,6 +282,7 @@ public class ExamController {
      * @return 是否添加成功
      */
     @PostMapping("/{examId}/students")
+    @LogRecord(module = "考试管理", action = "为考试添加考生", targetType = "考试", logType = LogRecord.LogType.OPERATION)
     public Response<Boolean> addStudentsToExam(@PathVariable("examId") Long examId,
                                           @RequestBody List<Long> studentIds) {
         try {
@@ -293,6 +301,7 @@ public class ExamController {
      * @return 是否移除成功
      */
     @DeleteMapping("/{examId}/students")
+    @LogRecord(module = "考试管理", action = "从考试中移除考生", targetType = "考试", logType = LogRecord.LogType.OPERATION)
     public Response<Boolean> removeStudentsFromExam(@PathVariable("examId") Long examId,
                                                @RequestBody List<Long> studentIds) {
         try {
@@ -310,6 +319,7 @@ public class ExamController {
      * @return 考生列表
      */
     @GetMapping("/{examId}/students")
+    @LogRecord(module = "考试管理", action = "获取考试的所有考生", targetType = "考试", logType = LogRecord.LogType.OPERATION)
     public Response<List<ExamRecord>> getStudentsByExam(@PathVariable("examId") Long examId) {
         try {
             List<ExamRecord> records = examService.getStudentsByExam(examId);
@@ -326,6 +336,7 @@ public class ExamController {
      * @return CSV格式的监考数据
      */
     @GetMapping("/{examId}/export")
+    @LogRecord(module = "考试管理", action = "导出考试监考数据", targetType = "考试", logType = LogRecord.LogType.OPERATION)
     public ResponseEntity<String> exportExamMonitoringData(@PathVariable("examId") Long examId) {
         try {
             List<ExamRecord> records = examService.getStudentsByExam(examId);

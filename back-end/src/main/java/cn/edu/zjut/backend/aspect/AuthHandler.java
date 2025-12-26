@@ -12,7 +12,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
+import cn.edu.zjut.backend.util.UserContext;
 import java.util.Arrays;
 import java.util.List;
 
@@ -68,9 +68,8 @@ public class AuthHandler {
             if(claims==null){
                 throw new Exception("Token invalid");
             }
-
+            // 设置UserContext，供AOP使用
             UserContext.setClaims(claims);
-
             // ✅ 放行，执行 Controller
             return joinPoint.proceed();
         } catch (Exception e) {
