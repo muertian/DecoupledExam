@@ -11,33 +11,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4fbd584e-7bd6-478b-8e4e-ed914d672ffe" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../front-end/src/apis/Server/registerAPI.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../front-end/src/apis/Server/teacherRegisterAPI.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../front-end/src/apis/Server/userAPI.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../front-end/src/views/admin/dashboard/index.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../front-end/src/views/admin/index.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../front-end/src/views/admin/profile/index.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../front-end/src/views/admin/teacherRegister/index.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../front-end/src/views/register/index.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../uploads/face_images/face_5_1766488599168.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql.txt" beforeDir="false" afterPath="$PROJECT_DIR$/sql.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/zjut/backend/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/zjut/backend/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/zjut/backend/dto/UpdateUserInfoRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/zjut/backend/dto/UpdateUserInfoRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/zjut/backend/po/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/zjut/backend/po/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/zjut/backend/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/zjut/backend/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/zjut/backend/util/Jwt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/zjut/backend/util/Jwt.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/edu/zjut/backend/util/SM4test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/edu/zjut/backend/app/SM4test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/apis/Server/loginService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/apis/Server/loginAPI.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/apis/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/apis/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/routers/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/routers/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/views/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/views/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../front-end/src/views/login/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/views/login/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sql.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../sql.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/views/admin/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/views/admin/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../uploads/avatars/avatar_1_1766557797337.JPG" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -323,7 +299,7 @@
       <workItem from="1766319285787" duration="3215000" />
       <workItem from="1766322527232" duration="1859000" />
       <workItem from="1766385787179" duration="30714000" />
-      <workItem from="1766554568290" duration="3498000" />
+      <workItem from="1766554568290" duration="5565000" />
     </task>
     <servers />
   </component>

@@ -27,89 +27,9 @@
     </div>
 
     <!-- 主内容区域 -->
-    <div class="flex">
-      <!-- 侧边栏 -->
-      <div class="drawer-side z-0 w-64 bg-base-100 min-h-screen">
-        <div class="menu p-4 text-base-content">
-          <h2 class="text-lg font-semibold mb-4">功能导航</h2>
-          
-          <ul class="space-y-2">
-            <li>
-              <router-link 
-                to="/admin" 
-                class="flex items-center p-2 rounded-lg hover:bg-base-300"
-                active-class="bg-primary text-white"
-              >
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"></path>
-                </svg>
-                <span>仪表盘</span>
-              </router-link>
-            </li>
-            <li>
-              <router-link 
-                to="/admin/simulate-login" 
-                class="flex items-center p-2 rounded-lg hover:bg-base-300"
-                active-class="bg-primary text-white"
-              >
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                </svg>
-                <span>模拟用户登录</span>
-              </router-link>
-            </li>
-            <li>
-              <details class="group">
-                <summary class="flex items-center p-2 rounded-lg hover:bg-base-300 cursor-pointer">
-                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-                  </svg>
-                  <span>用户管理</span>
-                </summary>
-                <ul class="p-2 ml-6 space-y-1">
-                  <li>
-                    <router-link 
-                      to="/admin/user-management/students" 
-                      class="flex items-center p-2 rounded-lg hover:bg-base-300"
-                      active-class="bg-primary text-white"
-                    >
-                      <span>学生用户管理</span>
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link 
-                      to="/admin/user-management/teachers" 
-                      class="flex items-center p-2 rounded-lg hover:bg-base-300"
-                      active-class="bg-primary text-white"
-                    >
-                      <span>教师用户管理</span>
-                    </router-link>
-                  </li>
-                </ul>
-              </details>
-            </li>
-            <li>
-              <router-link 
-                to="/admin/profile" 
-                class="flex items-center p-2 rounded-lg hover:bg-base-300"
-                active-class="bg-primary text-white"
-              >
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                </svg>
-                <span>个人信息管理</span>
-              </router-link>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- 主内容区域 -->
-      <div class="flex-1 p-6">
-        <div class="bg-base-100 rounded-lg shadow min-h-[calc(100vh-140px)]">
-          <router-view />
-        </div>
+    <div class="p-6">
+      <div class="bg-base-100 rounded-lg shadow min-h-[calc(100vh-140px)]">
+        <router-view />
       </div>
     </div>
   </div>
