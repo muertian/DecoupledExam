@@ -3,13 +3,9 @@ import pinia from "../stores/createPinia";
 import { useMainStore } from "../stores";
 import { storeToRefs } from "pinia";
 
-import { Admin, Login, Register, TeacherRegister, ProfileManagement, Question, Subject, ExamPaper } from "../views";
+import { Admin, Login, Register, TeacherRegister, ProfileManagement, Question, Subject, ExamPaper, StudentDashboard } from "../views";
 
 const routes: Array<RouteRecordRaw> = [
-  {
-    path : "/",
-    redirect : "/hello"        // 实际情况，不会有单纯的根路由，所以在访问网址时，就需要重定向。
-  },
   {
     path: "/",
     redirect: "/login"
@@ -65,7 +61,55 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
-
+  {
+    path: "/student",
+    component: () => import('../views/student/index.vue'),
+    children: [
+      {
+        path: "",
+        name: "studentDashboard",
+        component: StudentDashboard,
+      },
+      {
+        path: "courses",
+        name: "studentCourses",
+        component: () => import('../views/student/courses/index.vue'),
+      },
+      {
+        path: "courses/join",
+        name: "joinCourse",
+        component: () => import('../views/student/courses/joinCourse.vue'),
+      }
+    ]
+  }
+  ,
+  {
+    path: "/teacher",
+    component: () => import('../views/teacher/dashboard/index.vue'),
+    children: [
+      {
+        path: "",
+        name: "teacherDashboard",
+        component: () => import('../views/teacher/dashboard/index.vue'),
+      },
+      {
+        path: "courses",
+        name: "teacherCourses",
+        component: () => import('../views/teacher/courses/index.vue'),
+      }
+    ]
+  }
+  ,
+  {
+    path: "/teacher",
+    name: "teacherDashboard",
+    component: () => import('../views/teacher/dashboard/index.vue'),
+  },
+  {
+    path: "/teacher/courses",
+    name: "teacherCourses",
+    component: () => import('../views/teacher/courses/index.vue'),
+  }
 ];
 
 const router = createRouter({
@@ -95,12 +139,43 @@ router.beforeEach((to, _, next) => {
       '/admin/teacher/register'
     ];
     
+    // 检查是否需要学生权限
+    const studentPaths = [
+      '/student',
+      '/student/courses',
+      '/student/notifications',
+      '/student/exams',
+      '/student/grades',
+      '/student/mistakes'
+    ];
+    
     if (adminPaths.some(path => to.path.startsWith(path))) {
       // 这里可以添加检查管理员权限的逻辑
       // 暂时允许所有已登录用户访问（实际应用中需要验证权限）
       next();
+    } else if (studentPaths.some(path => to.path.startsWith(path))) {
+      // 检查是否为学生用户
+      const userType = localStorage.getItem('userType');
+      if (userType === '2') { // 2 代表学生
+        next();
+      } else {
+        // 非学生用户重定向到登录页或其他页面
+        next('/login');
+      }
     } else {
-      next();
+      // 检查是否为教师路径，学生不允许访问教师页面
+      const teacherPaths = ['/teacher'];
+      if (teacherPaths.some(path => to.path.startsWith(path))) {
+        const userType = localStorage.getItem('userType');
+        if (userType === '1') { // 1 代表教师
+          next();
+        } else {
+          // 非教师用户重定向到登录页或其他页面
+          next('/login');
+        }
+      } else {
+        next();
+      }
     }
   }
 });

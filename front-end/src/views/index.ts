@@ -6,6 +6,8 @@ import Question from "./question/index.vue";
 import Subject from "./subject/index.vue";
 import Admin from "./admin/index.vue"
 import ExamPaper from "./examPaper/index.vue"
+import StudentDashboard from "./student/dashboard/index.vue"
+import StudentCourses from './student/courses/index.vue'
 
 export {
     Login,
@@ -15,6 +17,8 @@ export {
     Question,
     Subject,
     Admin,
-    ExamPaper
+    ExamPaper,
+    StudentDashboard,
+    StudentCourses,
 }
 
