@@ -40,23 +40,77 @@
           </label>
         </div>
 
-        <!-- 试卷ID -->
+        <!-- 试卷选择 -->
+        <!-- 试卷选择 -->
         <div class="form-control mb-6">
           <label class="label">
-            <span class="label-text text-base-content font-medium">试卷ID *</span>
+            <span class="label-text text-base-content font-medium">试卷 *</span>
           </label>
-          <input
-            v-model="form.paperId"
-            type="number"
-            placeholder="请输入试卷ID"
-            class="input input-bordered w-full"
-            :class="{ 'input-error': errors.paperId }"
-            required
-          />
-          <label class="label" v-if="errors.paperId">
-            <span class="label-text-alt text-error">{{ errors.paperId }}</span>
-          </label>
+
+          <!-- 未选择状态 -->
+          <div v-if="!paperInfo?.paperId" class="flex flex-col gap-2">
+            <button
+                type="button"
+                class="btn btn-outline btn-primary gap-2"
+                onclick="ExamPaperDialog.showModal()"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              选择试卷
+            </button>
+            <label class="label" v-if="errors.paperId">
+              <span class="label-text-alt text-error">{{ errors.paperId }}</span>
+            </label>
+          </div>
+
+          <!-- 已选择状态 -->
+          <div v-else class="card bg-base-100 border border-base-200 p-4">
+            <div class="flex justify-between items-start">
+              <div>
+                <h3 class="font-semibold text-base-content">{{ paperInfo.paperName }}</h3>
+                <div class="text-sm text-base-content/70 mt-1">
+                  <div>ID: {{ paperInfo.paperId }} · 总分: {{ paperInfo.totalScore }} 分</div>
+                  <div class="mt-1">
+                    <span class="badge badge-ghost badge-sm mr-2">类型: {{ paperInfo.composeType === '1' ? '手动组卷' : '自动组卷' }}</span>
+                    <span class="badge badge-ghost badge-sm" :class="paperInfo.isSealed === '1' ? 'badge-error' : 'badge-success'">
+              {{ paperInfo.isSealed === '1' ? '已封存' : '可用' }}
+            </span>
+                  </div>
+                </div>
+              </div>
+              <button
+                  type="button"
+                  class="btn btn-sm btn-ghost text-error hover:bg-error/10"
+                  @click="() => { paperInfo = null; form.paperId = 0; }"
+                  title="取消选择"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <label class="label" v-if="errors.paperId">
+              <span class="label-text-alt text-error">{{ errors.paperId }}</span>
+            </label>
+          </div>
         </div>
+<!--        <div class="form-control mb-6">-->
+<!--          <label class="label">-->
+<!--            <span class="label-text text-base-content font-medium">试卷ID *</span>-->
+<!--          </label>-->
+<!--          <input-->
+<!--            v-model="form.paperId"-->
+<!--            type="number"-->
+<!--            placeholder="请输入试卷ID"-->
+<!--            class="input input-bordered w-full"-->
+<!--            :class="{ 'input-error': errors.paperId }"-->
+<!--            required-->
+<!--          />-->
+<!--          <label class="label" v-if="errors.paperId">-->
+<!--            <span class="label-text-alt text-error">{{ errors.paperId }}</span>-->
+<!--          </label>-->
+<!--        </div>-->
 
         <!-- 教师ID（仅教务老师可见） -->
         <div v-if="userType === '0'" class="form-control mb-6">
@@ -158,7 +212,7 @@
           <h3 class="text-lg font-semibold text-base-content mb-4">基本设置</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="form-control">
-              <label class="cursor-pointer label">
+              <label class="cursor-pointer label flex">
                 <input 
                   v-model="form.allowLateEnter" 
                   type="checkbox" 
@@ -206,9 +260,9 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="form-control">
               <label class="cursor-pointer label">
-                <input 
-                  v-model="form.questionShuffle" 
-                  type="checkbox" 
+                <input
+                  v-model="form.questionShuffle"
+                  type="checkbox"
                   class="checkbox checkbox-primary"
                 />
                 <span class="label-text ml-2">题目乱序</span>
@@ -216,9 +270,9 @@
             </div>
             <div class="form-control">
               <label class="cursor-pointer label">
-                <input 
-                  v-model="form.optionShuffle" 
-                  type="checkbox" 
+                <input
+                  v-model="form.optionShuffle"
+                  type="checkbox"
                   class="checkbox checkbox-primary"
                 />
                 <span class="label-text ml-2">选项乱序</span>
@@ -226,9 +280,9 @@
             </div>
             <div class="form-control">
               <label class="cursor-pointer label">
-                <input 
-                  v-model="form.preventScreenSwitch" 
-                  type="checkbox" 
+                <input
+                  v-model="form.preventScreenSwitch"
+                  type="checkbox"
                   class="checkbox checkbox-primary"
                 />
                 <span class="label-text ml-2">防止切屏</span>
@@ -236,9 +290,9 @@
             </div>
             <div class="form-control">
               <label class="cursor-pointer label">
-                <input 
-                  v-model="form.peerReview" 
-                  type="checkbox" 
+                <input
+                  v-model="form.peerReview"
+                  type="checkbox"
                   class="checkbox checkbox-primary"
                 />
                 <span class="label-text ml-2">生生互评</span>
@@ -357,6 +411,18 @@
       </div>
     </form>
   </div>
+
+  <dialog id="ExamPaperDialog" class="modal">
+    <div class="modal-box max-w-[95vw] w-[95vw]">
+      <ExamPaper
+        :is-component="true"
+        @selectExamPaper="selectExamPaper"
+      />
+    </div>
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
+    </form>
+  </dialog>
 </template>
 
 <script setup lang="ts">
@@ -364,6 +430,7 @@ import { ref, onMounted, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useRequest } from 'vue-hooks-plus';
 import { getExamDetailAPI, createExamAPI, updateExamAPI } from '../../apis';
+import { ExamPaper } from "../../views"
 
 const router = useRouter();
 const route = useRoute();
@@ -376,7 +443,7 @@ const isEditMode = computed(() => !!examId);
 // 表单数据
 const form = ref({
   title: '',
-  paperId: 1,
+  paperId: 0,
   teacherId: userType === '0' ? 0 : parseInt(localStorage.getItem('userId') || '0'), // 教务老师可指定，普通老师默认当前用户
   startTime: '',
   endTime: '',
@@ -397,6 +464,23 @@ const form = ref({
   peerReview: false,
   description: ''
 });
+
+const paperInfo = ref<{
+  paperId?: number;
+  paperName?: string;
+  totalScore?: number;
+  composeType?: string;
+  isSealed?: string;
+  creatorId?: number;
+  createTime?: number;
+  updatedAt?: number;
+} | null>(null);
+
+const selectExamPaper = (paper: any) => {
+  paperInfo.value = paper;
+  form.value.paperId = paper.paperId;
+  ExamPaperDialog.close()
+}
 
 // 错误信息
 const errors = ref({

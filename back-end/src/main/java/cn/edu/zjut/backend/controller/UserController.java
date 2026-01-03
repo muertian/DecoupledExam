@@ -7,6 +7,9 @@ import cn.edu.zjut.backend.util.Jwt;
 import cn.edu.zjut.backend.util.Response;
 import cn.edu.zjut.backend.util.LoginLogger;
 import cn.edu.zjut.backend.util.UserContext;
+import cn.smartjavaai.common.entity.DetectionResponse;
+import cn.smartjavaai.common.entity.R;
+import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,12 +135,29 @@ public class UserController {
     public Response<String> loginFace(@RequestBody Map<String, Object> loginRequest) {
 //        FaceRec faceRec = FaceRec.getInstance();
         FaceRec faceRec = new FaceRec();
+
         String videoBase64 = loginRequest.get("video").toString();
         if(videoBase64==null || videoBase64.isEmpty()){
             return Response.error("参数禁止为空");
         }
-        if(faceRec.faceRecognition(videoBase64)){
-            return Response.success("人脸登录成功");
+
+        R<DetectionResponse> res = faceRec.faceRecognition(videoBase64);
+
+        if(res != null && res.getCode() == 0 && res.getMessage().equals("成功") && res.getData()!=null){
+
+            Gson gson = new Gson();
+            String metadata = res.getData().getDetectionInfoList().get(0).getFaceInfo().getFaceSearchResults().get(0).getMetadata();
+            Map Metadata = gson.fromJson(metadata, Map.class);
+
+            Jwt jwt = new Jwt();
+
+            Long id = ((Number) Metadata.get("id")).longValue();
+            String username = (String) Metadata.get("username");
+            Integer userType = ((Number) Metadata.get("userType")).intValue();
+
+            String token = jwt.generateJwtToken(id, username, userType);
+
+            return Response.success(token);
         }else{
             return Response.error("人脸登录失败！");
         }

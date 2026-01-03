@@ -2,6 +2,7 @@ package cn.edu.zjut.backend.app;
 
 import cn.edu.zjut.backend.util.FaceRec;
 import cn.smartjavaai.common.cv.SmartImageFactory;
+import cn.smartjavaai.common.entity.DetectionResponse;
 import cn.smartjavaai.common.entity.R;
 import cn.smartjavaai.common.entity.face.LivenessResult;
 import cn.smartjavaai.face.config.FaceDetConfig;
@@ -29,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.Map;
 
 import ai.djl.modality.cv.Image;
 import io.milvus.param.MetricType;
@@ -66,11 +68,18 @@ public class FaceTest {
 
 //        faceRec.faceRegister(file);
 
-        if(faceRec.faceRecognition(base64String)){
-            System.out.println("识别成功");
-        }else {
-            System.out.println("识别失败");
-        }
-//        faceRec.faceRegister("1", "{测试一下}", image);
+        R<DetectionResponse> res = faceRec.faceRecognition(base64String);
+
+        String metadata = res.getData().getDetectionInfoList().get(0).getFaceInfo().getFaceSearchResults().get(0).getMetadata();
+
+        Map Metadata = new Gson().fromJson(metadata, Map.class);
+
+        Long id = ((Number) Metadata.get("id")).longValue();
+        String username = (String) Metadata.get("username");
+        Integer userType = ((Number) Metadata.get("userType")).intValue();
+
+        System.out.println(id);
+        System.out.println(username);
+        System.out.println(userType);
     }
 }

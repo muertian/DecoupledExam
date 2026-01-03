@@ -33,8 +33,15 @@
         </div>
       </div>
 
+      <!-- 👇 小字提示 -->
+      <label v-show="isComponent" class="label">
+        <span class="label-text-alt text-sm text-base-content/60">
+          双击选择试卷
+        </span>
+      </label>
+
       <!-- 按钮区域  -->
-      <div v-if="!isBatchMode" class="flex gap-4 w-3/4 mt-4">
+      <div v-if="!isBatchMode && !isComponent" class="flex gap-4 w-3/4 mt-4">
         <button class="btn btn-primary text-base px-6" @click="isOpenManualComposeDia = true">
           手动组卷
         </button>
@@ -73,7 +80,14 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(paper, index) in papers" :key="paper.id" class="hover cursor-pointer" @click="toggleSelect(paper.paperId)" @contextmenu.prevent="openMenu($event,index)">
+        <tr
+            v-for="(paper, index) in papers"
+            :key="paper.id"
+            class="hover cursor-pointer"
+            @click="toggleSelect(paper.paperId)"
+            @contextmenu.prevent="openMenu($event,index)"
+            @dblclick.prevent="handleDbClick(index)"
+        >
           <!-- 多选框单元格：仅在批量模式下显示 -->
           <td v-if="isBatchMode">
             <input
@@ -156,21 +170,17 @@
 
 <script setup lang="ts">
 import {ref, onMounted, nextTick} from 'vue'
-import {
-  ExamPaperFilter,
-  ManualComposeDialog,
-  SmartComposeDialog,
-  EditExamPaperDialog,
-  PaperPreview
-} from '../../components'
-import {
-  getExamPapersAPI,
-  getQuestionTypeAPI,
-  getSubjectsAPI,
-  deleteExamPapersAPI,
-  modifySealedStatusAPI
-} from '../../apis'
+import { ExamPaperFilter, ManualComposeDialog, SmartComposeDialog, EditExamPaperDialog, PaperPreview} from '../../components'
+import { getExamPapersAPI, getQuestionTypeAPI, getSubjectsAPI, deleteExamPapersAPI, modifySealedStatusAPI} from '../../apis'
 import { useRequest } from 'vue-hooks-plus'
+
+const props = withDefaults(defineProps<{  // 用于在组卷中（作为一个组件中），可以进行选择
+  isComponent?: boolean
+}>(), {
+  isComponent: false // 在这里设置默认值
+})
+
+const varemit = defineEmits(['selectExamPaper'])   // 用于在组卷中（作为一个组件中），可以进行选择
 
 // --- 数据 ---
 const subjectList = ref([])
@@ -190,6 +200,7 @@ const isLoading = ref(false)
 
 // --- 生命周期 ---
 onMounted(() => {
+
   getExamPapers()
   getQuestionType()
   getSubjects()
@@ -203,6 +214,19 @@ const menuPos = ref({
 
 const nowId = ref<number>(-1);
 const nowInd = ref<number>(-1);
+
+const handleDbClick = (ind) => {
+  nowInd.value = ind
+  nowId.value = papers.value[ind].paperId
+
+  if(props.isComponent){
+    varemit('selectExamPaper', papers.value[ind])
+  }else{
+    nextTick(()=>{
+      paperPreviewDialog.showModal()
+    })
+  }
+}
 
 const openMenu = (event, ind) => {
 
@@ -270,6 +294,7 @@ const getExamPapers = () => {
     onSuccess(res) {
       if (res['code'] === 200) {
         papers.value = res['data']
+        console.log(papers.value)
         // 如果当前在批量模式，清理已不存在的选中项
         if (isBatchMode.value) {
           const validIds = new Set(papers.value.map(p => p.id))

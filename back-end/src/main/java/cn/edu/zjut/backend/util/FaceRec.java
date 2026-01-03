@@ -88,7 +88,7 @@ public class FaceRec {
     }
 
     // 人脸识别
-    public boolean faceRecognition(String file){
+    public R<DetectionResponse> faceRecognition(String file){
         InputStream inputStream = Base64Util.base64ToInputStream(file);
         R<LivenessResult> status = livenessDetModel.detectVideo(inputStream);
         System.out.println(status.getData().toString());
@@ -96,19 +96,15 @@ public class FaceRec {
             try {
                 BufferedImage bufferedImage = extractRandomFrame(file);
                 Image image = SmartImageFactory.getInstance().fromBufferedImage(bufferedImage);
-                R<DetectionResponse> res = faceQuery(image);
-                System.out.println(res.toString());
-                if(res.getCode().intValue() == 0 && res.getMessage().toString().equals("成功") && res.getData()!=null){
-                    return true;
-                }else{
-                    return false;
-                }
+
+                return faceQuery(image);
+
             } catch (Exception e) {
                 e.printStackTrace();
-                return false;
+                return null;
             }
         }else{
-            return false;
+            return null;
         }
     }
 

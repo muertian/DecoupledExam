@@ -5,7 +5,7 @@ import { useRoute } from 'vue-router'
 
 const axiosInstance = axios.create({        //创建实例
     baseURL:"",
-    timeout: 10000,
+    timeout: 20000,
 })
 
 axiosInstance.interceptors.response.use(
