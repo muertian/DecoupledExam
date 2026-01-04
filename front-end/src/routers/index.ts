@@ -9,7 +9,8 @@ import {
   Register,
   TeacherRegister,
   ProfileManagement,
-  Question
+  Question,
+  LogManagement
 } from "../views";
 
 const routes: Array<RouteRecordRaw> = [
@@ -59,6 +60,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/teacher/question",
         name: "question",
         component : Question,
+      },
+      {
+        path: "/admin/logs",
+        name: "logManagement",
+        component: LogManagement,
       }
     ]
   }

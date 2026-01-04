@@ -8,6 +8,11 @@ import importQuestionsAPI from "./Server/importQuestionsAPI";
 import registerAPI  from "./Server/registerAPI";
 import teacherRegisterAPI from "./Server/teacherRegisterAPI";
 import userAPI from "./Server/userAPI";
+import {
+  getSystemOperationLogsAPI,
+  getSecurityEventLogsAPI,
+  getUserLoginLogsAPI
+} from "./Server/getLogsAPI";
 
 export {
     loginAPI,
@@ -20,4 +25,7 @@ export {
     registerAPI,
     teacherRegisterAPI,
     userAPI,
+    getSystemOperationLogsAPI,
+    getSecurityEventLogsAPI,
+    getUserLoginLogsAPI,
 }
