@@ -58,6 +58,12 @@ import addExamPaperQuestionsAPI from "./Server/examPaper/addExamPaperQuestionsAP
 import getImportProgressAPI from "./Server/questions/getImportProgressAPI";
 import getPaperGenerateProgressAPI from "./Server/examPaper/getPaperGenerateProgressAPI";
 import modifySealedStatusAPI from "./Server/examPaper/modifySealedStatusAPI";
+import {
+    getSystemOperationLogsAPI,
+    getSecurityEventLogsAPI,
+    getUserLoginLogsAPI
+} from "./Server/getLogsAPI";
+
 
 export {
     loginAPI,
@@ -113,5 +119,8 @@ export {
     addExamPaperQuestionsAPI,
     getImportProgressAPI,
     getPaperGenerateProgressAPI,
-    modifySealedStatusAPI
+    modifySealedStatusAPI,
+    getSystemOperationLogsAPI,
+    getSecurityEventLogsAPI,
+    getUserLoginLogsAPI
 }
